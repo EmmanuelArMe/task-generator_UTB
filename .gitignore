@@ -1,0 +1,33 @@
+# ===== Flutter / Dart =====
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+.pub-cache/
+.pub/
+build/
+*.iml
+.idea/
+.vscode/
+*.log
+
+# ===== Android =====
+android/.gradle/
+android/captures/
+android/local.properties
+android/key.properties
+android/app/debug
+android/app/profile
+android/app/release
+**/*.keystore
+**/*.jks
+
+# ===== Credenciales sensibles (NO subir a Git) =====
+# El archivo de configuración de Firebase contiene identificadores del proyecto.
+android/app/google-services.json
+lib/firebase_options.dart
+**/secrets.dart
+
+# ===== Sistema operativo =====
+.DS_Store
+Thumbs.db

@@ -1,0 +1,45 @@
+name: task_manager
+description: "Gestor de Tareas UTB - App con autenticación Firebase, geolocalización con Google Maps y almacenamiento en Firebase Realtime Database con soporte offline."
+# Evita publicar accidentalmente el paquete en pub.dev
+publish_to: 'none'
+
+# Versión de la aplicación (versionName+versionCode para Android)
+version: 1.0.0+1
+
+environment:
+  # Se usa la API moderna de color (Color.withValues) y temas *ThemeData,
+  # disponibles desde Flutter 3.27 / Dart 3.6.
+  sdk: ">=3.6.0 <4.0.0"
+  flutter: ">=3.27.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  # Traducciones oficiales (DatePicker, etc.) en español.
+  flutter_localizations:
+    sdk: flutter
+
+  # --- Iconografía iOS-style ---
+  cupertino_icons: ^1.0.8
+
+  # --- Firebase ---
+  firebase_core: ^3.6.0          # Inicialización del SDK de Firebase
+  firebase_auth: ^5.3.1          # Autenticación (registro / login / logout)
+  firebase_database: ^11.1.4     # Realtime Database (almacenamiento en la nube + offline)
+
+  # --- Google Maps y ubicación ---
+  google_maps_flutter: ^2.9.0    # Widget de mapa de Google Maps
+  geolocator: ^14.0.0            # Obtención de la ubicación actual del dispositivo
+  geocoding: ^4.0.0              # Convierte coordenadas a una dirección legible (opcional)
+
+  # --- Gestión de estado y utilidades ---
+  provider: ^6.1.2               # Inyección de dependencias / estado reactivo
+  intl: ^0.20.2                  # Formateo de fechas en español (lo fija flutter_localizations)
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^4.0.0          # Reglas de análisis estático recomendadas
+
+flutter:
+  uses-material-design: true

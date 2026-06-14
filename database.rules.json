@@ -1,0 +1,11 @@
+{
+  "//": "Reglas de seguridad de Firebase Realtime Database. Cópialas en la consola (Realtime Database > Reglas). Garantizan que cada usuario solo accede a SUS tareas.",
+  "rules": {
+    "tasks": {
+      "$uid": {
+        ".read": "auth != null && auth.uid === $uid",
+        ".write": "auth != null && auth.uid === $uid"
+      }
+    }
+  }
+}

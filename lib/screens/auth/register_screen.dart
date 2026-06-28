@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 import '../../services/auth_service.dart';
@@ -86,6 +87,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       controller: _emailCtrl,
                       keyboardType: TextInputType.emailAddress,
                       textInputAction: TextInputAction.next,
+                      inputFormatters: [
+                        LengthLimitingTextInputFormatter(Validators.maxEmailLength),
+                      ],
                       decoration: const InputDecoration(
                         labelText: 'Correo electrónico',
                         prefixIcon: Icon(Icons.email_outlined),
@@ -98,8 +102,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       controller: _passwordCtrl,
                       obscureText: _obscure,
                       textInputAction: TextInputAction.next,
+                      inputFormatters: [
+                        LengthLimitingTextInputFormatter(
+                            Validators.maxPasswordLength),
+                      ],
                       decoration: InputDecoration(
                         labelText: 'Contraseña',
+                        helperText: 'Mínimo 8 caracteres, con letras y números.',
                         prefixIcon: const Icon(Icons.lock_outline),
                         suffixIcon: IconButton(
                           tooltip: _obscure ? 'Mostrar' : 'Ocultar',

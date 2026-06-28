@@ -179,3 +179,25 @@ canal privado o añade tus credenciales de prueba siguiendo esta guía.
 - [x] Mapa con todas las tareas geolocalizadas
 - [x] UI Material 3 con tema claro/oscuro y enfoque en accesibilidad
 - [x] Manejo de errores y estados de carga/vacío
+
+---
+
+## 🔒 Seguridad
+
+La aplicación fue auditada y endurecida siguiendo el **OWASP Mobile Top 10**.
+Resumen de las medidas implementadas (detalle completo en
+[INFORME_SEGURIDAD.md](INFORME_SEGURIDAD.md)):
+
+- **Validación server-side** en Realtime Database (`database.rules.json`):
+  acceso por usuario + reglas `.validate` de tipos, rangos y longitudes
+  (defensa contra inyección de datos en NoSQL).
+- **Validación y saneamiento de entradas** en el cliente: límites de longitud
+  y eliminación de caracteres de control (`lib/utils/validators.dart`).
+- **Política de contraseñas robusta** (mín. 8 caracteres con letras y números).
+- **Solo HTTPS**: tráfico en claro bloqueado (`network_security_config.xml`).
+- **Backup deshabilitado** (`allowBackup="false"`).
+- **Credenciales fuera del control de versiones** y API key de Maps restringida.
+- **APK de release ofuscado** (`--obfuscate`).
+
+Análisis ejecutados: `flutter analyze` (sin problemas), `flutter test`
+(incluye `test/security_test.dart`) y **Android Lint** (`gradlew :app:lintDebug`).

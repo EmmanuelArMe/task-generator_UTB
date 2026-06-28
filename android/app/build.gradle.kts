@@ -34,6 +34,33 @@ android {
             signingConfig = signingConfigs.getByName("debug")
         }
     }
+
+    lint {
+        // Reporta los hallazgos pero no aborta el build; se revisan en el
+        // informe de seguridad (INFORME_SEGURIDAD.md).
+        abortOnError = false
+        // Falsos positivos / hallazgos fuera de nuestro control:
+        //  - PropertyEscape: aplica a 'local.properties' (archivo generado por
+        //    Flutter, específico de la máquina y NO versionado).
+        //  - NotificationPermission: proviene del plugin geolocator; la app NO
+        //    usa ubicación en segundo plano, así que por mínimo privilegio NO
+        //    declaramos POST_NOTIFICATIONS.
+        //  - ObsoleteSdkInt: carpeta de recursos generada por la plantilla.
+        //  - GradleDependency: la versión de firebase-bom (33.5.1) está fijada
+        //    a propósito por compatibilidad con los plugins de Flutter; no es
+        //    un problema de seguridad, solo un aviso de "existe versión nueva".
+        //  - DataExtractionRules: los backups ya están TOTALMENTE desactivados
+        //    con allowBackup="false" (todas las versiones de Android) y se
+        //    declaran dataExtractionRules (Android 12+); el aviso restante solo
+        //    pide el atributo legacy fullBackupContent, redundante en este caso.
+        disable += setOf(
+            "PropertyEscape",
+            "NotificationPermission",
+            "ObsoleteSdkInt",
+            "GradleDependency",
+            "DataExtractionRules",
+        )
+    }
 }
 
 kotlin {

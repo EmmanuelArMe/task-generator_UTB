@@ -51,5 +51,61 @@ void main() {
       const task = Task(id: '1', title: 't', description: '', createdAt: 0);
       expect(task.copyWith(isDone: true).isDone, isTrue);
     });
+
+    test('clearDueDate elimina la fecha límite', () {
+      const task = Task(
+        id: '1',
+        title: 't',
+        description: '',
+        createdAt: 0,
+        dueDate: 123456,
+      );
+      expect(task.copyWith(clearDueDate: true).dueDate, isNull);
+    });
+
+    test('actualiza título, descripción y fecha de creación', () {
+      const task = Task(id: '1', title: 'viejo', description: '', createdAt: 0);
+      final nuevo = task.copyWith(
+        title: 'nuevo',
+        description: 'desc',
+        createdAt: 999,
+      );
+      expect(nuevo.title, 'nuevo');
+      expect(nuevo.description, 'desc');
+      expect(nuevo.createdAt, 999);
+      expect(nuevo.id, '1'); // se conserva
+    });
+  });
+
+  group('Task.fromMap (casos límite)', () {
+    test('reconstruye una tarea sin ubicación ni fecha (campos nulos)', () {
+      final task = Task.fromMap('k', {
+        'title': 'Solo título',
+        'isDone': true,
+        'createdAt': 100,
+      });
+      expect(task.hasLocation, isFalse);
+      expect(task.dueDate, isNull);
+      expect(task.locationName, isNull);
+      expect(task.isDone, isTrue);
+    });
+
+    test('acepta coordenadas como int o double (num)', () {
+      final task = Task.fromMap('k', {
+        'title': 't',
+        'createdAt': 0,
+        'latitude': 10, // int
+        'longitude': -75.5, // double
+      });
+      expect(task.latitude, 10.0);
+      expect(task.longitude, -75.5);
+      expect(task.hasLocation, isTrue);
+    });
+
+    test('usa valores por defecto si faltan title/createdAt', () {
+      final task = Task.fromMap('k', {});
+      expect(task.title, '');
+      expect(task.createdAt, 0);
+    });
   });
 }

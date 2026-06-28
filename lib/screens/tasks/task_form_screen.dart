@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
 
@@ -91,12 +92,20 @@ class _TaskFormScreenState extends State<TaskFormScreen> {
     if (!_formKey.currentState!.validate()) return;
     setState(() => _saving = true);
 
+    // Sanitiza las entradas antes de persistirlas en la nube (capa de
+    // seguridad: recorta espacios, elimina caracteres de control y limita
+    // la longitud). El servidor lo refuerza con reglas `.validate`.
+    final cleanTitle = Validators.sanitize(_titleCtrl.text,
+        maxLength: Validators.maxTitleLength);
+    final cleanDesc = Validators.sanitize(_descCtrl.text,
+        maxLength: Validators.maxDescriptionLength);
+
     try {
       if (widget.isEditing) {
         // Actualización: conservamos id y fecha de creación originales.
         final updated = widget.existing!.copyWith(
-          title: _titleCtrl.text.trim(),
-          description: _descCtrl.text.trim(),
+          title: cleanTitle,
+          description: cleanDesc,
           dueDate: _dueDate?.millisecondsSinceEpoch,
           clearDueDate: _dueDate == null,
           latitude: _location?.latitude,
@@ -108,8 +117,8 @@ class _TaskFormScreenState extends State<TaskFormScreen> {
       } else {
         final task = Task(
           id: '', // Lo asigna Realtime Database (push id).
-          title: _titleCtrl.text.trim(),
-          description: _descCtrl.text.trim(),
+          title: cleanTitle,
+          description: cleanDesc,
           createdAt: DateTime.now().millisecondsSinceEpoch,
           dueDate: _dueDate?.millisecondsSinceEpoch,
           latitude: _location?.latitude,
@@ -162,6 +171,9 @@ class _TaskFormScreenState extends State<TaskFormScreen> {
                 TextFormField(
                   controller: _titleCtrl,
                   textInputAction: TextInputAction.next,
+                  inputFormatters: [
+                    LengthLimitingTextInputFormatter(Validators.maxTitleLength),
+                  ],
                   decoration: const InputDecoration(
                     labelText: 'Título',
                     prefixIcon: Icon(Icons.title),
@@ -175,6 +187,11 @@ class _TaskFormScreenState extends State<TaskFormScreen> {
                   controller: _descCtrl,
                   minLines: 3,
                   maxLines: 6,
+                  maxLength: Validators.maxDescriptionLength,
+                  inputFormatters: [
+                    LengthLimitingTextInputFormatter(
+                        Validators.maxDescriptionLength),
+                  ],
                   decoration: const InputDecoration(
                     labelText: 'Descripción (opcional)',
                     alignLabelWithHint: true,

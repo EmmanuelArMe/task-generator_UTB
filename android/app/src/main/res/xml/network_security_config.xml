@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Configuración de seguridad de red.
+  Bloquea todo el tráfico HTTP en claro (cleartext): la app solo puede
+  comunicarse por HTTPS. Firebase y Google Maps usan HTTPS, por lo que esto
+  no afecta la funcionalidad y protege contra ataques de intermediario (MITM).
+-->
+<network-security-config>
+    <base-config cleartextTrafficPermitted="false" />
+</network-security-config>

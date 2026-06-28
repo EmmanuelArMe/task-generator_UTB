@@ -28,6 +28,15 @@ android/app/google-services.json
 lib/firebase_options.dart
 **/secrets.dart
 
+# ===== Informes (se entregan aparte, no se versionan) =====
+INFORME_TECNICO.md
+INFORME_SEGURIDAD.md
+*.pdf
+
+# ===== Artefactos de análisis / cobertura =====
+.scannerwork/
+coverage/
+
 # ===== Sistema operativo =====
 .DS_Store
 Thumbs.db

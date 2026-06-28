@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Reglas de extracción de datos (Android 12+ / API 31+).
+  Excluyen TODOS los datos de la app tanto de las copias de seguridad en la
+  nube como de la transferencia entre dispositivos. Es coherente con
+  android:allowBackup="false" y evita que datos locales/caché salgan del
+  dispositivo (defensa contra exposición de datos — OWASP M9).
+-->
+<data-extraction-rules>
+    <cloud-backup>
+        <exclude domain="root" />
+    </cloud-backup>
+    <device-transfer>
+        <exclude domain="root" />
+    </device-transfer>
+</data-extraction-rules>

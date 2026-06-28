@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 import '../../services/auth_service.dart';
@@ -140,6 +141,10 @@ class _LoginScreenState extends State<LoginScreen> {
                       keyboardType: TextInputType.emailAddress,
                       textInputAction: TextInputAction.next,
                       autofillHints: const [AutofillHints.email],
+                      // Límite de longitud (defensa contra entradas enormes).
+                      inputFormatters: [
+                        LengthLimitingTextInputFormatter(Validators.maxEmailLength),
+                      ],
                       decoration: const InputDecoration(
                         labelText: 'Correo electrónico',
                         prefixIcon: Icon(Icons.email_outlined),
@@ -154,6 +159,10 @@ class _LoginScreenState extends State<LoginScreen> {
                       textInputAction: TextInputAction.done,
                       autofillHints: const [AutofillHints.password],
                       onFieldSubmitted: (_) => _submit(),
+                      inputFormatters: [
+                        LengthLimitingTextInputFormatter(
+                            Validators.maxPasswordLength),
+                      ],
                       decoration: InputDecoration(
                         labelText: 'Contraseña',
                         prefixIcon: const Icon(Icons.lock_outline),
@@ -167,7 +176,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           onPressed: () => setState(() => _obscure = !_obscure),
                         ),
                       ),
-                      validator: Validators.password,
+                      validator: Validators.loginPassword,
                     ),
 
                     Align(

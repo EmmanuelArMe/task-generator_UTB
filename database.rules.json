@@ -1,10 +1,43 @@
 {
-  "//": "Reglas de seguridad de Firebase Realtime Database. Cópialas en la consola (Realtime Database > Reglas). Garantizan que cada usuario solo accede a SUS tareas.",
+  "//": "Reglas de seguridad de Firebase Realtime Database (Realtime Database > Reglas). Implementan: (1) control de acceso por usuario (cada quien solo lee/escribe SUS tareas) y (2) validacion server-side de la estructura y los tipos de datos, que es la defensa contra inyeccion de datos en una base NoSQL.",
   "rules": {
+    ".read": false,
+    ".write": false,
     "tasks": {
       "$uid": {
         ".read": "auth != null && auth.uid === $uid",
-        ".write": "auth != null && auth.uid === $uid"
+        ".write": "auth != null && auth.uid === $uid",
+        ".indexOn": ["createdAt"],
+        "$taskId": {
+          ".validate": "newData.hasChildren(['title', 'createdAt'])",
+          "title": {
+            ".validate": "newData.isString() && newData.val().length > 0 && newData.val().length <= 100"
+          },
+          "description": {
+            ".validate": "newData.isString() && newData.val().length <= 1000"
+          },
+          "isDone": {
+            ".validate": "newData.isBoolean()"
+          },
+          "createdAt": {
+            ".validate": "newData.isNumber()"
+          },
+          "dueDate": {
+            ".validate": "newData.isNumber()"
+          },
+          "latitude": {
+            ".validate": "newData.isNumber() && newData.val() >= -90 && newData.val() <= 90"
+          },
+          "longitude": {
+            ".validate": "newData.isNumber() && newData.val() >= -180 && newData.val() <= 180"
+          },
+          "locationName": {
+            ".validate": "newData.isString() && newData.val().length <= 200"
+          },
+          "$other": {
+            ".validate": false
+          }
+        }
       }
     }
   }
